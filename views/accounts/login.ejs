@@ -1,5 +1,3 @@
-// views/accounts/login.ejs
-
 <% include ../header.ejs %>
 <div class="row">
     <div class="col-md-4 col-md-offset-4">
@@ -15,7 +13,7 @@
                     <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                     <fieldset>
                         <div class="form-group">
-                            <input class="form-control" placeholder="학번" name="stuId" type="text" autofocus="" required="">
+                            <input class="form-control" placeholder="학번" name="stuID" type="text" autofocus="" required="">
                         </div>
                         <div class="form-group">
                             <input class="form-control" placeholder="Password" name="password" type="password" value="" required="">
@@ -32,9 +30,9 @@
 (function(){
     $(document).ready(function() {
         $('#login_form').submit(function(){
-            var $stuIdInput = $('#login_form input[name=stuId]');
+            var $stuIDInput = $('#login_form input[name=stuID]');
             var $passwordInput = $('#login_form input[name=password]');
-            if(!$stuIdInput.val()){
+            if(!$stuIDInput.val()){
                 alert("학번을 입력해주세요.");
                 $usernameInput.focus();
                 return false;

@@ -10,7 +10,7 @@
                     <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
                     <fieldset>
                         <div class="form-group">
-                            <input class="form-control" placeholder="학번" name="stuId" type="text" autofocus="" required="">
+                            <input class="form-control" placeholder="학번" name="stuID" type="text" autofocus="" required="">
                         </div>
                         <div class="form-group">
                             <input class="form-control" placeholder="Password" name="password" type="password" value="" required="">
@@ -45,7 +45,7 @@
 (function(){
     $(document).ready(function() {
         $('#join_form').submit(function(){
-            var $stuIdInput = $('#join_form input[name=stuId]');
+            var $stuIDInput = $('#join_form input[name=stuID]');
             var $passwordInput = $('#join_form input[name=password]');
             var $passwordInput2 = $('#join_form input[name=password2]');
             var $displayname = $('#join_form input[name=displayname]');
@@ -53,9 +53,9 @@
             var $majorInput = $('#join_form input[name=major]');
             var $gradeInput = $('#join_form input[name=grade]');
             var $phoneInput = $('#join_form input[name=phone]');
-            if(!$stuIdInput.val()){
+            if(!$stuIDInput.val()){
                 alert("학번을 입력해주세요.");
-                $stuIdInput.focus();
+                $stuIDInput.focus();
                 return false;
             }
             if(!$passwordInput.val()){
