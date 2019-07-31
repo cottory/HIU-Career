@@ -56,24 +56,32 @@ async ( req , stuID , password, done) => {
 }
 ));
 
-
-router.get('/', (req, res) => {
-    res.send('account app');
-});
-
 /**
  * JOIN
  */
 router.get('/join', csrfProtection, (req, res) => {
-    res.render('accounts/join', { csrfToken: req.csrfToken() });
+    try {
+        res.render('accounts/join', { csrfToken: req.csrfToken() });
+    } catch (e) {
+        console.log(e);
+    }
 });
 
 router.post('/join', csrfProtection, async(req, res) => {
     try{
-
-        await models.User.create(req.body);
-        res.send('<script>alert("회원가입 성공");location.href="/accounts/login";</script>');
-
+        var user = await models.User.findOne({
+            where: {
+                stuID: req.body.stuID
+            }
+        })
+        
+        if (user) {
+            res.send('<script>alert("이미 가입한 학번입니다.");location.href="/accounts/join";</script>');
+        }
+        else {
+            await models.User.create(req.body);
+            res.send('<script>alert("회원가입 성공");location.href="/accounts/login";</script>');
+        }
     }catch(e){
         console.log(e);
     }
@@ -84,7 +92,11 @@ router.post('/join', csrfProtection, async(req, res) => {
  * LOGIN
  */
 router.get('/login', csrfProtection, (req, res) => {
-    res.render('accounts/login', { flashMessage : req.flash().error, csrfToken: req.csrfToken() });
+    try {
+        res.render('accounts/login', { flashMessage : req.flash().error, csrfToken: req.csrfToken() });
+    } catch (e) {
+        console.log(e);
+    }
 });
 
 router.post('/login' , csrfProtection,
@@ -97,14 +109,17 @@ router.post('/login' , csrfProtection,
     }
 );
 
-router.get('/success', (req, res) => {
-    res.send(req.user);
-});
 
-
+/**
+ * Logout
+ */
 router.get('/logout', (req, res) => {
-    req.logout();
-    res.redirect('/accounts/login');
+    try {
+        req.logout();
+        res.redirect('/accounts/login');
+    } catch (e) {
+        console.log(e);
+    }
 });
 
 module.exports = router;

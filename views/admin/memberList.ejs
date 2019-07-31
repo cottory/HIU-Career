@@ -1,0 +1,56 @@
+<% include ../header.ejs %>
+    <% include ./sidebar.ejs %>
+
+    <div class="col-sm-10">
+        <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+        <table class="table table-bordered table-hover">
+                <tr>
+                    <th>학번</th>
+                    <th>이름</th>
+                    <th>소속학과</th>
+                    <th>학년</th>
+                    <th>전화번호</th>
+                    <th>근로 유형</th>
+                    <th>봉사 분야</th>
+                    <th>누계</th>
+                    <th>삭제</th>
+                </tr>
+
+                <% users.forEach(function(user){ %>
+                <tr>
+                    <td>
+                        <%=user.stuID%>
+                    </td>
+                    <td>
+                        <a href="/admin/memberDetails/<%=user.id%>">
+                        <%=user.displayname%>
+                        </a>
+                    </td>
+                    <td>
+                        <%=user.major%>
+                    </td>
+                    <td>
+                        <%=user.grade%>
+                    </td>
+                    <td>
+                        <%=user.phone%>
+                    </td>
+                    <td>
+                        <%=user.userType%>
+                    </td>
+                    <td>
+                        <%=user.workType%>
+                    </td>
+                    <td>
+                        <%= user.time.toFixed(1) %>
+                    </td>
+                    <td>
+                        <a href="/admin/memberList/delete/<%=user.id%>" class="btn btn-danger" 
+                        onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+                    </td>
+                </tr>
+                <% }) %>
+        </table>
+    </div>
+
+<% include ../footer.ejs %>

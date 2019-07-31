@@ -1,0 +1,17 @@
+<div class="col-sm-2">
+    <% if (typeof(userData) !== 'undefined') { %>
+        <% if ((userData.stuID === 'admin') || (userData.stuID === 'admin2')) { %>
+        <%} else {%>
+            <div class="panel panel-default">
+                <div class="panel-heading">메뉴</div>
+                <div class="panel-body">
+                    <ul>
+                        <li><a href="/profile/workTimes">근로현황</a></li>
+                        <li><a href="/profile/workTimes/write">시간등록</a></li>
+                        <li><a href="/profile/workTimes/print/<%=userData.id%>">시간표 생성</a></li>
+                    </ul>
+                </div>
+            </div>
+        <%}%>
+    <%}%>
+</div>

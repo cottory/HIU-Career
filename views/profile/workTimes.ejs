@@ -1,0 +1,54 @@
+<% include ../header.ejs %>
+    <% include ./sidebar.ejs %>
+
+    <div class="col-sm-10">
+        <div class="col-md-8 col-md-offset-2">
+            <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+            <table class="table table-bordered table-hover">
+                    <tr>
+                        <th>근무월일</th>
+                        <th>요일</th>
+                        <th>근무시간</th>
+                        <th>근로상세내역</th>
+                        <th>계</th>
+                        <th>누계</th>
+                        <th>수정</th>
+                        <th>삭제</th>
+                    </tr>
+
+                    <% user.Time.forEach(function(workTime){ %>
+                    <tr>
+                        <td>
+                            <%=workTime.date%>
+                        </td>
+                        <td>
+                            <%=workTime.dayOfWeek%>
+                        </td>
+                        <td>
+                            <%=workTime.start_time%> - <%=workTime.end_time%>
+                        </td>
+                        <td>
+                            <%=user.workType%>
+                        </td>
+                        <td>
+                            <%=workTime.time%>
+                        </td>
+                        <td>
+                            <!--<%=user.time%>-->
+                            <% totalTime += workTime.time %>
+                            <%= totalTime.toFixed(1) %>
+                        </td>
+                        <td>
+                            <a href="/profile/workTimes/edit/<%= workTime.id %>" class="btn btn-primary">수정</a>
+                        </td>
+                        <td>
+                            <a href="/profile/workTimes/delete/<%= workTime.id %>" class="btn btn-danger" 
+                            onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </table>
+        </div>
+    </div>
+
+<% include ../footer.ejs %>

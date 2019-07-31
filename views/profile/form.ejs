@@ -1,0 +1,103 @@
+<% include ../header.ejs %>
+
+    <% include ./sidebar.ejs %>
+
+    <div class="col-sm-10">
+        <div class="col-md-6 col-md-offset-3">
+            <form action="" method="post" id="editForm">
+                <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th style="width:200px;">학번</th>
+                            <td>
+                                <input type="text" class="form-control" value="<%=user.stuID%>" readonly/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>이름</th>
+                            <td>
+                                <input type="text" class="form-control" name="displayname" value="<%=user.displayname%>" readonly/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>패스워드</th>
+                            <td>
+                                <input type="password" class="form-control" value="" name="password" required=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>패스워드 확인</th>
+                            <td>
+                                <input type="password" class="form-control" value="" name="password2" required=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>소속학과</th>
+                            <td>
+                                <input type="text" class="form-control" name="major" value="<%=user.major%>" required=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>학년</th>
+                            <td>
+                                <input type="text" class="form-control" placeholder="숫자만 입력하세요" name="grade" value="<%=user.grade%>" required=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td>
+                                <input type="text" class="form-control" placeholder="000-0000-0000" name="phone" value="<%=user.phone%>" required=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>근로 유형</th>
+                            <td>
+                                <input type="text" class="form-control" placeholder="시간급/정액제" name="userType" value="<%=user.userType%>" required=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>봉사분야</th>
+                            <td>
+                                <input type="text" class="form-control" name="workType" value="<%=user.workType%>" required=""/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-primary">수정하기</button>
+            </form>
+        </div>
+    </div>
+
+<script>
+$('#editForm').submit(function(){
+    if(confirm("수정하시겠습니까?")){
+
+        var $passwordInput = $('#editForm input[name=password]');
+        var $passwordInput2 = $('#editForm input[name=password2]');
+
+        if(!$passwordInput.val()){
+                alert("패스워드를 입력해주세요.");
+                $passwordInput.focus();
+                return false;
+        }
+        if(!$passwordInput2.val()){
+                alert("확인 패스워드를 입력해주세요.");
+                $passwordInput2.focus();
+                return false;
+        }
+        if($passwordInput.val() !== $passwordInput2.val()){
+                alert("패스워드와 확인용패스워드를 똑같이 입력해주세요.");
+                return false;
+        }
+
+        return true;
+
+    }else{
+        return false;
+    }
+    
+});
+</script>
+
+<% include ../footer.ejs %>

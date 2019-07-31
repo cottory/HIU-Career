@@ -25,6 +25,9 @@
                             <input class="form-control" placeholder="근로 유형" name="userType" type="text" value="" required="">
                         </div>
                         <div class="form-group">
+                            <input class="form-control" placeholder="봉사 분야" name="workType" type="text" value="" required="">
+                        </div>
+                        <div class="form-group">
                             <input class="form-control" placeholder="학과" name="major" type="text" value="" required="">
                         </div>
                         <div class="form-group">
@@ -50,14 +53,26 @@
             var $passwordInput2 = $('#join_form input[name=password2]');
             var $displayname = $('#join_form input[name=displayname]');
             var $userTypeInput = $('#join_form input[name=userType]');
+            var $workTypeInput = $('#join_form input[name=workType]');
             var $majorInput = $('#join_form input[name=major]');
             var $gradeInput = $('#join_form input[name=grade]');
             var $phoneInput = $('#join_form input[name=phone]');
+
+            function isAlpha(str) {
+                let pattern = /^[a-zA-Z]+$/;
+                return (pattern.test(str)) ? true : false;
+            }
+            function isNumber(str) {
+                let pattern = /^[0-9]+$/;
+                return (pattern.test(str)) ? true : false;
+            }
+
             if(!$stuIDInput.val()){
                 alert("학번을 입력해주세요.");
                 $stuIDInput.focus();
                 return false;
             }
+            
             if(!$passwordInput.val()){
                 alert("패스워드를 입력해주세요.");
                 $passwordInput.focus();
@@ -92,9 +107,24 @@
                 $gradeInput.focus();
                 return false;
             }
+            else {
+                let _grade = $gradeInput.val();
+                _grade = Number(_grade);
+                if (_grade === 1 || _grade === 2|| _grade === 3 || _grade === 4) {}
+                else {
+                    alert("학년 입력형식이 올바르지 않습니다.");
+                    $gradeInput.focus();
+                    return false;
+                }
+            }
             if(!$phoneInput.val()){
                 alert("핸드폰 번호를 입력해주세요.");
                 $phoneInput.focus();
+                return false;
+            }
+            if(!$workTypeInput.val()){
+                alert("봉사 분야를 입력해주세요.");
+                $workTypeInput.focus();
                 return false;
             }
             return true;

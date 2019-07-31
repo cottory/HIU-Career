@@ -21,6 +21,9 @@ const sequelize = new Sequelize( process.env.DATABASE,
             max: 5,
             min: 0,
             idle: 10000
+        }, 
+        define: {
+            timestamps: false,  //creat_at, update_at 컬럼 생성 x
         }
 });
 

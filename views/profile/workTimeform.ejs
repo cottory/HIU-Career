@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>HIU Career</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">    
+    
+    <!--bootstrap js 추가 -->
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- jQuery CDN 3.x -->
+    <script 
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+
+    <script>
+
+            function checkDate() {
+                let inputDate = document.regi_form.date.value;            
+
+                if ((inputDate.length !== 5) || (inputDate[2] !== '/')) { 
+                    alert('날짜 입력 형식이 맞지 않습니다.')
+                    return false;
+                } else {
+                    // xx/xx 양식은 만족
+                    let dateSplit = inputDate.split('/');
+                    let month = Number(dateSplit[0]);
+                    let day = Number(dateSplit[1]);
+
+                    if ((1 <= month) && (month <= 12)) {
+                        if (month === 2) {
+                            if ((1 <= day) && (day <= 28)) return true;
+                            else {
+                                alert('날짜 입력 형식이 맞지 않습니다.')
+                                return false;
+                            }
+                        }
+                        else if ((month === 4) || (month === 6) || (month === 9) || (month === 11)) {
+                            if ((1 <= day) && (day <= 30)) return true;
+                            else {
+                                alert('날짜 입력 형식이 맞지 않습니다.')
+                                return false;
+                            }
+                        }
+                        else {
+                            if ((1 <= day) && (day <= 31)) return true;
+                            else {
+                                alert('날짜 입력 형식이 맞지 않습니다.')
+                                return false;
+                            }
+                        }
+                    }
+                    alert('날짜 입력 형식이 맞지 않습니다.')
+                    return false;
+                }
+            }
+
+            function checkDayOfWeek() {
+                let inputDayOfWeek = document.regi_form.dayOfWeek.value;
+                
+                if ((inputDayOfWeek === '월') || (inputDayOfWeek === '화') || (inputDayOfWeek === '수') ||
+                    (inputDayOfWeek === '목') || (inputDayOfWeek === '금')) {
+                    return true;
+                } else {
+                    alert('입력한 요일 형식이 맞지 않습니다.')
+                    return false;
+                }
+            }
+
+            function checkStartTime() {
+                let inputStartTime = document.regi_form.start_time.value;            
+
+                if ((inputStartTime.length !== 5) || (inputStartTime[2] !== ':')) { 
+                    alert('시작시간 입력 형식이 맞지 않습니다.')
+                    return false;
+                } else {
+                    // xx/xx 양식은 만족
+                    let timeSplit = inputStartTime.split(':');
+                    let hour = Number(timeSplit[0]);
+                    let minute = Number(timeSplit[1]);
+
+                    if ((9 <= hour) && (hour < 18)) {                
+                        if (hour === 12) {
+                            alert('시작시간 입력 형식이 맞지 않습니다.')
+                            return false;
+                        }
+                    }
+                    else {
+                        alert('시작시간 입력 형식이 맞지 않습니다.')
+                        return false;
+                    }
+
+                    if ((minute === 0) || (minute === 30)) {
+                        return true;
+                    }
+                    else {
+                        alert('분은 :00 또는 :30 단위만 가능합니다.')
+                        return false;
+                    }
+                }
+            }
+
+            function checkEndTime() {
+                let inputEndTime = document.regi_form.end_time.value;            
+
+                if ((inputEndTime.length !== 5) || (inputEndTime[2] !== ':')) { 
+                    alert('종료시간 입력 형식이 맞지 않습니다.');
+                    return false;
+                } else {
+                    // xx/xx 양식은 만족
+                    let timeSplit = inputEndTime.split(':');
+                    let hour = Number(timeSplit[0]);
+                    let minute = Number(timeSplit[1]);
+
+                    if ((9 <= hour) && (hour <= 18)) { }
+                    else {
+                        alert('종료시간 입력 형식이 맞지 않습니다.')
+                        return false;
+                    }
+
+                    if ((minute === 0) || (minute === 30)) {
+                        return true;
+                    }
+                    else {
+                        alert('분은 :00 또는 :30 단위만 가능합니다.')
+                        return false;
+                    }
+                }
+            }
+
+            function checkCalculate() {
+                //case1. 시작 시간 < 종료 시간
+                let inputStartTime = document.regi_form.start_time.value;
+                let inputEndTime = document.regi_form.end_time.value; 
+
+                let stTimeSplit = inputStartTime.split(':');
+                let enTimeSplit = inputEndTime.split(':');
+                
+                let stHour = Number(stTimeSplit[0]);
+                let stMin = Number(stTimeSplit[1]);
+
+                let enHour = Number(enTimeSplit[0]);
+                let enMin = Number(enTimeSplit[1]);
+
+                if (stHour <= enHour) {
+                    if (stHour === enHour) {
+                        if (stMin === enMin) {
+                            alert('시작시간과 종료시간은 같을 수 없습니다.')
+                            return false;
+                        }
+                    }
+                } 
+                else {
+                    alert('시작시간이 종료시간보다 크게 설정되었습니다.')
+                    return false;
+                }
+        
+                //case2. 종료 시간 - 시작 시간 = 계
+                //1st. '계' 입력형식 제대로 들어왔는지 확인하기
+                let inputTime = document.regi_form.time.value;
+                inputTime = Number(inputTime);
+                
+                if (0 < inputTime && inputTime <= 8) {}
+                else {
+                    if (inputTime <= 0) {
+                        alert('근로시간은 0시간보다 작거나 같을 수 없습니다.')
+                        return false;
+                    }
+                    else if (inputTime > 8) {
+                        alert('근로시간은 8시간을 초과할 수 없습니다.')
+                        return false;
+                    }   
+                    else {
+                        alert('계의 입력형식이 올바르지 않습니다.')
+                        return false;
+                    }             
+                }
+
+                //2nd. 종료 시간 - 시작 시간 = 계 계산하기
+                let _startTime, _endTime;
+                
+                _startTime = stHour + "" + stMin;
+                _endTime = enHour + "" + enMin;
+
+                if (stMin === 0) _startTime += "0";
+                if (enMin === 0) _endTime += "0";
+
+                _startTime = Number(_startTime);
+                _endTime = Number(_endTime);
+
+                let differ = _endTime - _startTime;
+
+                if (differ % 100 === 0) {
+                    if ((differ / 100) === inputTime) {
+                        return true;
+                    }
+                    else {
+                        alert('종료시간 - 시작시간과 계의 값이 다릅니다.')
+                        return false;
+                    }
+                }
+                else {  // (% 100 === 30) && (% 100 === 70) case 처리
+                    let _time = differ / 100;
+                    _time = Math.floor(_time);
+                    _time += 0.5;
+
+                    if (_time === inputTime) {
+                        return true;
+                    }
+                    else {
+                        alert('종료시간 - 시작시간과 계의 값이 다릅니다.')
+                        return false;
+                    }
+                }
+            }
+
+            function checkForm() {
+                if ( checkDate() 
+                    && checkDayOfWeek() 
+                    && checkStartTime()
+                    && checkEndTime() 
+                    && checkCalculate() 
+                ) {
+                    //모든 근로시간 등록 유효성 검사를 통과한 경우
+                    return true; 
+                } 
+                else {
+                    return false;
+                }
+            } 
+    </script>
+</head>
+<body>
+    <div class="container" style="padding-top: 10px;">
+        <nav class="navbar navbar-inverse"> 
+            <div class="container-fluid"> 
+                <div class="navbar-header">
+                    <!-- 오른쪽 메뉴바 -->
+                    <button type="button" class="collapsed navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span> 
+                        <span class="icon-bar"></span> 
+                        <span class="icon-bar"></span>
+                    </button> 
+                    <a href="/" class="navbar-brand">HIU-Career</a>
+                </div> 
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+                    <ul class="nav navbar-nav">
+                        <% if ( typeof(userData) !== 'undefined' && ((userData.stuID === 'admin') || (userData.stuID === 'admin2')) ) {%>
+                            <li ><a href="/admin/memberList">ADMIN</a></li>
+                        <%}%>
+                        <%if (isLogin) {%>
+                            <li class="active"><a href="/profile">PROFILE</a></li> 
+                            <li><a href="/accounts/logout" onclick="return confirm('로그아웃 하시겠습니까?')">LOGOUT</a></li>
+                        <%} else { %>
+                            <li class="active"><a href="/accounts/join">JOIN</a></li> 
+                            <li><a href="/accounts/login">LOGIN</a></li>  
+                        <%} %>
+                    </ul> 
+                </div> 
+            </div> 
+        </nav>
+    <% include ./sidebar.ejs %>
+
+    <div class="col-sm-10">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">근로시간 등록</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" action="" method="post" name="regi_form" onsubmit="return checkForm();">
+                        <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="날짜: ex) 05/01, 05/21" name="date" type="text" value="<%=workTime.date%>" autofocus="" required="">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="요일: ex) 월" name="dayOfWeek" type="text" value="<%=workTime.dayOfWeek%>" autofocus="" required="">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="시작시간: ex) 09:00" name="start_time" type="text" value="<%=workTime.start_time%>" required="">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="종료시간: ex) 17:30" name="end_time" type="text" value="<%=workTime.end_time%>" required="">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="계: ex) 2 또는 3.5" name="time" type="text" value="<%=workTime.time%>" required="">
+                            </div>
+                            <!-- Change this to a button or input when using this as a form -->
+                            <input type="submit" class="btn btn-lg btn-success btn-block" value="제출하기">
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<% include ../footer.ejs %>

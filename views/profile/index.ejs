@@ -1,0 +1,50 @@
+<% include ../header.ejs %>
+
+    <% include ./sidebar.ejs %>
+
+    <div class="col-sm-10">
+        <div class="col-md-6 col-md-offset-3">
+            <input type="hidden" name="_csrf" value="<%=csrfToken%>" />
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>학번</th>
+                        <td><%=user.stuID%></td>
+                    </tr>
+                    <tr>
+                        <th>이름</th>
+                        <td><%=user.displayname%></td>
+                    </tr>
+                    <tr>
+                        <th>학과</th>
+                        <td><%=user.major%></td>
+                    </tr>
+                    <tr>
+                        <th>학년</th>
+                        <td><%=user.grade%></td>
+                    </tr>
+                    <tr>
+                        <th>전화번호</th>
+                        <td><%=user.phone%></td>
+                    </tr>
+                    <tr>
+                        <th>근로 유형</th>
+                        <td><%=user.userType%></td>
+                    </tr>
+                    <tr>
+                        <th>봉사 분야</th>
+                        <td><%=user.workType%></td>
+                    </tr>
+                    <tr>
+                        <th>누계</th>
+                        <td><%= user.time.toFixed(1) %></td>    
+                    </tr>
+                </tbody>
+            </table>
+            <a href="/profile/edit" class="btn btn-primary">수정하기</a>
+            <a href="/profile/delete/<%=user.id%>" class="btn btn-danger" 
+                onclick="return confirm('삭제하시겠습니까?')">회원탈퇴</a>
+        </div>
+    </div>    
+
+<% include ../footer.ejs %>

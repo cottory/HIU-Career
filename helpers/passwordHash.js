@@ -1,6 +1,9 @@
-//passwordHash.js
 const crypto = require('crypto');
-const mysalt = "nerguri";
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const mysalt = process.env.PASSWORD_HASH;
 
 module.exports = function (password) {  
   return crypto.createHash('sha512').update(password + mysalt).digest('base64');
