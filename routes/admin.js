@@ -5,6 +5,7 @@ const csrf = require('csurf');
 const csrfProtection = csrf({ cookie: true });
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
+const winston = require('../winston');
 
 /**
  * 관리자 페이지 라우팅
@@ -34,7 +35,7 @@ router.get('/memberList', csrfProtection, async (req,res) => {
         })
         res.render('admin/memberList', { users, csrfToken: req.csrfToken() });
     } catch(e) {
-        console.log(e);
+        winston.error('at /admin/memberList Routing:: ' + e.message);
     }
 
 });
@@ -64,7 +65,7 @@ router.get('/memberDetails/:id', csrfProtection, async (req,res) => {
           });   
         res.render('admin/memberDetails', { user, csrfToken: req.csrfToken() });
     } catch (e) {
-        console.log(e);
+        winston.error('at /admin/memberDetails/:id Routing:: ' + e.message);
     }
 });
 
@@ -83,7 +84,7 @@ router.get('/memberList/delete/:id', async(req, res) => {
         res.redirect('/admin/memberList');
 
     }catch(e){
-        console.log(e);
+        winston.error('at /admin/memberList/delete/:id Routing:: ' + e.message);
     }
 
 });
@@ -114,7 +115,7 @@ router.get('/resetTime', async (req, res) => {
         location.href="/admin/memberList";</script>');
 
     } catch(e) {
-        console.log(e);
+        winston.error('at /admin/resetTime Routing:: ' + e.message);
     }
 })
 

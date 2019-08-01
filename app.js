@@ -1,5 +1,5 @@
 const express = require('express');
-const logger = require('morgan');
+const morgan = require('morgan');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');  
@@ -41,35 +41,42 @@ const home = require('./routes/home');
 const profile = require('./routes/profile');
 const loginRequired = require('./helpers/loginRequired');
 const adminRequired = require('./helpers/adminRequired');
-
+const winston = require('./winston');
 
 /**
  * 
  */
 const app = express();
-const port = process.env.PORT_NUMBER;
-
 
 /**
  * VIEW 엔진 추가
  */
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.set('port', process.env.PORT || 8001);
 
 /**
  * Middleware setting
  */
-app.use(logger('dev'));
+if (process.env.NODE_ENV === 'production') {
+    app.use(morgan('combined'));
+} else {
+    app.use(morgan('dev'));
+}
+app.use(express.static(path.join(__dirname, 'public')));    //정적 파일을 넣을 public 폴더
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 //session 관련 셋팅
 app.use(session({
-    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
     cookie: {
+      httpOnly: true,
+      secure: false,
       maxAge: 2000 * 60 * 60 //지속시간 2시간
     }
 }));
@@ -85,7 +92,7 @@ app.use(flash());
 /**
  * 뷰에서만 글로벌로 사용할수 있는 변수 셋팅. 로그인 정보 뷰에서만 변수로 셋팅.
  */
-app.use(function(req, res, next) {
+app.use( (req, res, next) => {
     app.locals.isLogin = req.isAuthenticated();
     //app.locals.urlparameter = req.url; //현재 url 정보를 보내고 싶으면 이와같이 셋팅
     app.locals.userData = req.user; //사용 정보를 보내고 싶으면 이와같이 셋팅
@@ -106,20 +113,8 @@ app.use('/profile', loginRequired, profile);
 
 
 /**
- * 함수 호출이 일어난 곳을 추적하는 Logger
+ * 
  */
-(function() {
-    var childProcess = require("child_process");
-    var oldSpawn = childProcess.spawn;
-    function mySpawn() {
-        console.log('spawn called');
-        console.log(arguments);
-        var result = oldSpawn.apply(this, arguments);
-        return result;
-    }
-    childProcess.spawn = mySpawn;
-})();
-
-app.listen( port, () => {
-    console.log('Express listening on port', port);
-})
+app.listen( app.get('port'), () => {
+    winston.info('Listening on port ' + app.get('port'));
+});

@@ -5,6 +5,7 @@ const models = require('../models');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const passwordHash = require('../helpers/passwordHash');
+const winston = require('../winston');
 
 // csrf 셋팅
 const csrf = require('csurf');
@@ -61,9 +62,9 @@ async ( req , stuID , password, done) => {
  */
 router.get('/join', csrfProtection, (req, res) => {
     try {
-        res.render('accounts/join', { csrfToken: req.csrfToken() });
+        res.render('accounts/join', { csrfToken: req.csrfToken()});
     } catch (e) {
-        console.log(e);
+        winston.error('at /accounts/join Routing::GET ' + e.message);
     }
 });
 
@@ -83,7 +84,7 @@ router.post('/join', csrfProtection, async(req, res) => {
             res.send('<script>alert("회원가입 성공");location.href="/accounts/login";</script>');
         }
     }catch(e){
-        console.log(e);
+        winston.error('at /accounts/join Routing::POST ' + e.message);
     }
 });
 
@@ -95,7 +96,7 @@ router.get('/login', csrfProtection, (req, res) => {
     try {
         res.render('accounts/login', { flashMessage : req.flash().error, csrfToken: req.csrfToken() });
     } catch (e) {
-        console.log(e);
+        winston.error('at /accounts/login Routing:: ' + e.message);
     }
 });
 
@@ -118,7 +119,7 @@ router.get('/logout', (req, res) => {
         req.logout();
         res.redirect('/accounts/login');
     } catch (e) {
-        console.log(e);
+        winston.error('at /accounts/logout Routing:: ' + e.message);
     }
 });
 

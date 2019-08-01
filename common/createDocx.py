@@ -1,4 +1,4 @@
-# -*- coding:utf-8 -*-
+#-*- coding:utf-8 -*-
 
 import sys 
 from docx import Document
@@ -47,9 +47,11 @@ def __set_table_header(user_information, date_information):
     date_info = None
     global document
 
+
     heading = document.add_heading('봉사장학생 근무확인표')
     heading.alignment = WD_ALIGN_PARAGRAPH.CENTER # 가운데 정렬하는 방법
     # 같은 의미:: paragraph.alignment = 0  # for left, 1 for right, 2 center, 3 justify ....
+
 
     date_info = date_information.split(',')
     date_string = "("
@@ -61,6 +63,7 @@ def __set_table_header(user_information, date_information):
     heading_paragraph = document.add_paragraph(date_string)
     heading_paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT # 왼쪽 정렬하는 방법
 
+
     # make the table architecture
     table_head_1 = document.add_table(rows = 1, cols = 1, style='Table Grid')
     table_head_2 = document.add_table(rows = 2, cols = 4, style='Table Grid')
@@ -68,6 +71,7 @@ def __set_table_header(user_information, date_information):
     # make the table alignment
     table_head_1.alignment = WD_TABLE_ALIGNMENT.CENTER
     table_head_2.alignment = WD_TABLE_ALIGNMENT.CENTER
+
 
     # push contents at table 
     user_info = user_information.split(',')
@@ -186,9 +190,10 @@ def __set_table_tail():
 
 
 
-def __save_the_Document__(user_information):
+def __save_the_Document__(user_information, path):
     user_info = None
-    docx_file_name = "./uploads/"
+    docx_file_name = path + ""
+    docx_file_name += "/uploads/"
     global document
 
     user_info = user_information.split(',')
@@ -207,7 +212,7 @@ __init_the_Document__()
 __set_table_header(user_information, sys.argv[4])
 __set_table_body(tableSize, user_time)
 __set_table_tail()
-__save_the_Document__(user_information)
+__save_the_Document__(user_information, sys.argv[5])
 
 # for response:: this is a dummy response
 print('success')

@@ -24,7 +24,9 @@ module.exports = function( sequelize, DataTypes) {
             workType: {type: DataTypes.STRING},    //봉사 분야
             time: { type: DataTypes.FLOAT }  //누계
         },{
-            tableName: 'User'
+            tableName: 'User',
+            charsest: 'utf8',
+            collate: 'utf8_general_ci',
         }
     );
 

@@ -12,7 +12,9 @@ module.exports = function( sequelize, DataTypes) {
             end_time: { type: DataTypes.STRING },  // 근로 종료 시간
             time: { type: DataTypes.FLOAT }, // 계
         },{
-            tableName: 'WorkTime'
+            tableName: 'WorkTime',
+            charsest: 'utf8',
+            collate: 'utf8_general_ci',
         }
     );
 

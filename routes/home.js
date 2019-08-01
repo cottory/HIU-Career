@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const winston = require('../winston');
 
 /**
  * 시스템의 첫 라우팅을 관리합니다.
@@ -14,7 +15,7 @@ router.get('/', async ( req ,res) => {
             res.redirect('/profile/workTimes');
         }
     } catch (e) {
-        console.log(e);
+        winston.error('at / Routing:: ' + e.message);
     }
 
 });

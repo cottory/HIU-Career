@@ -6,6 +6,8 @@ const csrf = require('csurf');
 const csrfProtection = csrf({ cookie: true });
 const passport = require('passport');
 const fs = require('fs');
+const appRoot = require('app-root-path');
+const winston = require('../winston');
 
 
 passport.serializeUser(function(user, done) {
@@ -28,7 +30,7 @@ router.get('/', csrfProtection, async (req,res) => {
       res.render('profile/index', { user, csrfToken: req.csrfToken() });
 
     } catch (e) {
-      console.log(e);
+      winston.error('at /profile Routing:: ' + e.message);
     }
     
 });
@@ -41,7 +43,7 @@ router.get('/edit', csrfProtection, (req,res) => {
     try {
       res.render('profile/form', { user: req.user, csrfToken: req.csrfToken() });
     } catch (e) {
-      console.log(e);
+      winston.error('at /profile/edit Routing::GET ' + e.message);
     }
 });
   
@@ -87,7 +89,8 @@ router.post('/edit', csrfProtection, async(req,res) => {
       });
   
     } catch(e) {
-        throw(e);
+      winston.error('at /profile/edit Routing::POST ' + e.message);
+      throw(e);
     }
   
 });
@@ -107,7 +110,7 @@ router.get('/delete/:id', async(req, res) => {
     res.redirect('/accounts/login');
 
 }catch(e){
-    console.log(e);
+  winston.error('at /profile/delete/:id Routing:: ' + e.message);
 }
 });
 
@@ -141,7 +144,7 @@ router.get('/workTimes', csrfProtection, async(req,res) => {
       res.render('profile/workTimes', { user, csrfToken: req.csrfToken()});
 
   } catch (e) {
-      console.log(e);
+    winston.error('at /profile/workTimes Routing:: ' + e.message);
   }
 
 });
@@ -155,7 +158,7 @@ router.get('/workTimes/write', csrfProtection, async(req, res) => {
     res.render('profile/workTimeform', { workTime: "", csrfToken: req.csrfToken() });
 
   } catch (e) {
-    console.log(e);
+    winston.error('at /profile/workTimes/write Routing::GET ' + e.message);
   }
 });
 
@@ -201,7 +204,7 @@ router.post('/workTimes/write', csrfProtection, async(req, res) => {
         }
       
     } catch (e) {
-      console.log(e);
+      winston.error('at /profile/workTimes/write Routing::POST ' + e.message);
     }
 });
 
@@ -216,7 +219,7 @@ router.get('/workTimes/edit/:id', csrfProtection, async(req, res) => {
       res.render('profile/workTimeform', { workTime, csrfToken: req.csrfToken() });  
 
   }catch(e){
-      console.log(e);
+    winston.error('at /profile/workTimes/edit/:id Routing::GET ' + e.message);
   }
   
 });
@@ -261,7 +264,6 @@ router.post('/workTimes/edit/:id', csrfProtection , async(req, res) => {
 
           newTime = user.time - prevWorkTime + curWorkTime;
           newTime.toFixed(1);
-          console.log(typeof(newTime));
           await models.User.update(
             { 
               time: newTime 
@@ -275,7 +277,7 @@ router.post('/workTimes/edit/:id', csrfProtection , async(req, res) => {
       }
 
   }catch(e){
-      console.log(e);
+    winston.error('at /profile/workTimes/edit/:id Routing::POST ' + e.message);
   }
 
 });
@@ -293,7 +295,6 @@ router.get('/workTimes/delete/:id', async(req, res) => {
 
       let newTime = user.time - workTime.time;
       newTime.toFixed(1);
-      console.log(typeof(newTime));
       await models.WorkTime.destroy({
         where : {
           id : req.params.id
@@ -312,7 +313,7 @@ router.get('/workTimes/delete/:id', async(req, res) => {
       res.redirect('/profile/workTimes');
 
   }catch(e){
-      console.log(e);
+    winston.error('at /profile/workTimes/delete/:id Routing:: ' + e.message);
   }
 });
 
@@ -370,14 +371,17 @@ router.get('/workTimes/print/:id', async (req, res) => {
       loop++;
     })
     
+    let docxCodePath = appRoot.path + '/common/createDocx.py'
+
     var spawn = require("child_process").spawn; 
-    var process = spawn('python',["./common/createDocx.py", user_information, user_time, time_size, date]); 
+    var process = spawn('python',[docxCodePath, user_information, user_time, time_size, date, appRoot.path]); 
+    
     process.stdout.on('data', function(data) { 
       res.redirect('/profile/success');
     });
 
   } catch(e) {
-    console.log(e);
+    winston.error('at /profile/workTimes/print/:id Routing:: ' + e.message);
   }
   
 });
@@ -390,7 +394,7 @@ router.get('/success', ( _, res) => {
   try {
     res.render('profile/success');
   } catch (e) {
-    console.log(e);    
+    winston.error('at /profile/success Routing:: ' + e.message); 
   }
 });
 
@@ -401,11 +405,13 @@ router.get('/success', ( _, res) => {
 router.get('/workTimes/download', (req, res) => {
 
   try {
+    
       filePath = ""
       filePath += req.user.stuID;
       filePath += ".docx"
-  
-      fs.readFile('./uploads/' + filePath, (err, data) => {
+      let docxFilePath = appRoot.path + '/uploads/' + filePath;
+
+      fs.readFile(docxFilePath, (err, data) => {
         if (err) {
           console.log(err);
         } else {
@@ -415,7 +421,7 @@ router.get('/workTimes/download', (req, res) => {
         }
       });
   } catch (e) {
-      console.log(e);
+    winston.error('at /profile/workTimes/download Routing:: ' + e.message);
   }
   
 });
