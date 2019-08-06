@@ -63,7 +63,7 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     app.use(morgan('dev'));
 }
-app.use(express.static(path.join(__dirname, 'public')));    //정적 파일을 넣을 public 폴더
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 

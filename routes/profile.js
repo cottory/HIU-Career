@@ -417,7 +417,7 @@ router.get('/workTimes/download', profileRequired, (req, res) => {
 
       fs.readFile(docxFilePath, (err, data) => {
         if (err) {
-	  winston.error('at /profile/workTimes/download Routing:: ' + err.message);
+	        winston.error('at /profile/workTimes/download Routing in fs.readFile logic:: ' + err.message);
         } else {
           res.writeHead(200, {"Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
           res.write(data);
@@ -425,7 +425,7 @@ router.get('/workTimes/download', profileRequired, (req, res) => {
         }
       });
   } catch (e) {
-    	winston.error('at /profile/workTimes/download Routing:: ' + e.message);
+    	    winston.error('at /profile/workTimes/download Routing:: ' + e.message);
   }
   
 });
