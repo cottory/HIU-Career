@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');  
 const flash = require('connect-flash');
+const winston = require('./winston');
 
 //passport 로그인 관련
 const passport = require('passport');
@@ -20,15 +21,15 @@ const db = require('./models');
  */
 db.sequelize.authenticate()
 .then( () => {
-    console.log('Connection has been established successfully.');
+    winston.info("Connection has been established successfully.");
     return db.sequelize.sync();
-    // return db.sequelize.drop();
+    //return db.sequelize.drop();
 })
 .then ( () => {
-    console.log('DB Sync complete.');
+    winston.info("DB Sync complete.");
 })
 .catch(err => {
-    console.error('Unable to connect to the database:', err);
+    winston.error("Unable to connect to the database:" + err);
 })
 
 
@@ -41,8 +42,7 @@ const home = require('./routes/home');
 const profile = require('./routes/profile');
 const loginRequired = require('./helpers/loginRequired');
 const adminRequired = require('./helpers/adminRequired');
-const winston = require('./winston');
-
+const auth = require('./routes/auth');
 /**
  * 
  */
@@ -110,7 +110,7 @@ app.use('/', home);
 app.use('/accounts', accounts);
 app.use('/admin', adminRequired, admin);
 app.use('/profile', loginRequired, profile);
-
+app.use('/auth', auth);
 
 /**
  * 

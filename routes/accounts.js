@@ -5,6 +5,7 @@ const models = require('../models');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const passwordHash = require('../helpers/passwordHash');
+const loginRequired = require('../helpers/loginRequired');
 const winston = require('../winston');
 
 // csrf 셋팅
@@ -60,7 +61,7 @@ async ( req , stuID , password, done) => {
 /**
  * JOIN
  */
-router.get('/join', csrfProtection, (req, res) => {
+router.get('/join', csrfProtection, loginRequired, (req, res) => {
     try {
         res.render('accounts/join', { csrfToken: req.csrfToken()});
     } catch (e) {
@@ -68,7 +69,7 @@ router.get('/join', csrfProtection, (req, res) => {
     }
 });
 
-router.post('/join', csrfProtection, async(req, res) => {
+router.post('/join', csrfProtection, loginRequired, async(req, res) => {
     try{
         var user = await models.User.findOne({
             where: {
@@ -77,11 +78,16 @@ router.post('/join', csrfProtection, async(req, res) => {
         })
         
         if (user) {
-            res.send('<script>alert("이미 가입한 학번입니다.");location.href="/accounts/join";</script>');
+            res.send('<script>alert("이미 등록되어 있는 학번입니다.");location.href="/accounts/join";</script>');
         }
         else {
-            await models.User.create(req.body);
-            res.send('<script>alert("회원가입 성공");location.href="/accounts/login";</script>');
+            await models.User.update(
+            	req.body,
+		{
+		    where: { userID: req.user.userID }
+		}
+    	    );
+            res.send('<script>alert("프로필 등록 완료");location.href="/";</script>');
         }
     }catch(e){
         winston.error('at /accounts/join Routing::POST ' + e.message);

@@ -4,7 +4,7 @@
   "description": "HIU-Career Center",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node ./app.js"
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
     "mysql2": "^1.6.5",
     "nodemon": "^1.19.1",
     "passport": "^0.4.0",
+    "passport-kakao": "0.0.5",
     "passport-local": "^1.0.0",
     "sequelize": "^4.42.0",
     "winston": "^3.2.1",

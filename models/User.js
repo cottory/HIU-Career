@@ -9,12 +9,13 @@ module.exports = function( sequelize, DataTypes) {
         const User = sequelize.define('User', {      
             id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
             stuID: { type: DataTypes.STRING, 
-                allowNull: false,
+                // allowNull: true,
                 unique: true,
                 validate : {
                     len : [5, 7]
                 }
             },  //학번
+            userID: { type: DataTypes.STRING },   //카카오ID
             password: { type: DataTypes.STRING },
             displayname: { type: DataTypes.STRING },   //이름
             major: { type: DataTypes.STRING },  //소속학과

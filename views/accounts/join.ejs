@@ -13,12 +13,6 @@
                             <input class="form-control" placeholder="학번" name="stuID" type="text" autofocus="" required="">
                         </div>
                         <div class="form-group">
-                            <input class="form-control" placeholder="Password" name="password" type="password" value="" required="">
-                        </div>
-                        <div class="form-group">
-                            <input class="form-control" placeholder="Password 확인" name="password2" type="password" value="" required="">
-                        </div>
-                        <div class="form-group">
                             <input class="form-control" placeholder="이름" name="displayname" type="text" value="" required="">
                         </div>
                         <div class="form-group">
@@ -49,15 +43,12 @@
     $(document).ready(function() {
         $('#join_form').submit(function(){
             var $stuIDInput = $('#join_form input[name=stuID]');
-            var $passwordInput = $('#join_form input[name=password]');
-            var $passwordInput2 = $('#join_form input[name=password2]');
             var $displayname = $('#join_form input[name=displayname]');
             var $userTypeInput = $('#join_form input[name=userType]');
             var $workTypeInput = $('#join_form input[name=workType]');
             var $majorInput = $('#join_form input[name=major]');
             var $gradeInput = $('#join_form input[name=grade]');
             var $phoneInput = $('#join_form input[name=phone]');
-
             function isAlpha(str) {
                 let pattern = /^[a-zA-Z]+$/;
                 return (pattern.test(str)) ? true : false;
@@ -66,30 +57,14 @@
                 let pattern = /^[0-9]+$/;
                 return (pattern.test(str)) ? true : false;
             }
-
             if(!$stuIDInput.val()){
                 alert("학번을 입력해주세요.");
                 $stuIDInput.focus();
                 return false;
             }
-            
-            if(!$passwordInput.val()){
-                alert("패스워드를 입력해주세요.");
-                $passwordInput.focus();
-                return false;
-            }
-            if(!$passwordInput2.val()){
-                alert("확인 패스워드를 입력해주세요.");
-                $passwordInput2.focus();
-                return false;
-            }
             if(!$displayname.val()){
                 alert("이름을 입력해주세요.");
                 $displayname.focus();
-                return false;
-            }
-            if($passwordInput.val() !== $passwordInput2.val()){
-                alert("패스워드와 확인용패스워드를 똑같이 입력해주세요.");
                 return false;
             }
             if(!$userTypeInput.val()){

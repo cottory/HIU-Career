@@ -42,8 +42,11 @@
                 </tbody>
             </table>
             <a href="/profile/edit" class="btn btn-primary">수정하기</a>
-            <a href="/profile/delete/<%=user.id%>" class="btn btn-danger" 
-                onclick="return confirm('삭제하시겠습니까?')">회원탈퇴</a>
+            <% if ( typeof(userData) !== 'undefined' && ((userData.stuID === 'admin') || (userData.stuID === 'admin2')) ) {%>
+            <%} else { %> 
+                <a href="/profile/delete/<%=user.id%>" class="btn btn-danger" 
+                    onclick="return confirm('삭제하시겠습니까?')">회원탈퇴</a>
+            <%} %>
         </div>
     </div>    
 

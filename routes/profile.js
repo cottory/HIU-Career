@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const models = require('../models');
+const profileRequired = require('../helpers/profileRequired');
 const passwordHash = require('../helpers/passwordHash');
 const csrf = require('csurf');
 const csrfProtection = csrf({ cookie: true });
@@ -46,11 +47,14 @@ router.get('/edit', csrfProtection, (req,res) => {
       winston.error('at /profile/edit Routing::GET ' + e.message);
     }
 });
-  
+ 
 router.post('/edit', csrfProtection, async(req,res) => {
     
     try {
 
+      if (!req.body.stuID) {
+        req.body.stuID = req.user.stuID;
+      }
       if (!req.body.major) {
         req.body.major = req.user.major;
       }
@@ -153,7 +157,7 @@ router.get('/workTimes', csrfProtection, async(req,res) => {
 /**
  * 근로시간 등록 화면을 처리하는 라우팅입니다.
  */
-router.get('/workTimes/write', csrfProtection, async(req, res) => {
+router.get('/workTimes/write', csrfProtection, profileRequired, async(req, res) => {
   try {
     res.render('profile/workTimeform', { workTime: "", csrfToken: req.csrfToken() });
 
@@ -162,7 +166,7 @@ router.get('/workTimes/write', csrfProtection, async(req, res) => {
   }
 });
 
-router.post('/workTimes/write', csrfProtection, async(req, res) => {
+router.post('/workTimes/write', csrfProtection, profileRequired, async(req, res) => {
     try {
 
         const user = await models.User.findByPk(req.user.id);
@@ -212,7 +216,7 @@ router.post('/workTimes/write', csrfProtection, async(req, res) => {
 /**
  * 이미 등록한 근로시간을 수정할 수 있는 화면을 보여줍니다.
  */
-router.get('/workTimes/edit/:id', csrfProtection, async(req, res) => {
+router.get('/workTimes/edit/:id', csrfProtection, profileRequired, async(req, res) => {
 
   try{
       const workTime = await models.WorkTime.findByPk(req.params.id);
@@ -224,7 +228,7 @@ router.get('/workTimes/edit/:id', csrfProtection, async(req, res) => {
   
 });
 
-router.post('/workTimes/edit/:id', csrfProtection , async(req, res) => {
+router.post('/workTimes/edit/:id', csrfProtection , profileRequired, async(req, res) => {
 
   try{
       const workTime = await models.WorkTime.findByPk(req.params.id);
@@ -286,7 +290,7 @@ router.post('/workTimes/edit/:id', csrfProtection , async(req, res) => {
 /**
  * 등록한 근로시간 삭제를 처리하는 라우팅입니다.
  */
-router.get('/workTimes/delete/:id', async(req, res) => {
+router.get('/workTimes/delete/:id', profileRequired, async(req, res) => {
   
   try{
       
@@ -321,7 +325,7 @@ router.get('/workTimes/delete/:id', async(req, res) => {
 /**
  * '시간표 생성' 로직을 처리하는 라우팅입니다. docx 파일을 생성합니다.
  */
-router.get('/workTimes/print/:id', async (req, res) => {
+router.get('/workTimes/print/:id', profileRequired, async (req, res) => {
 
   try {
 
@@ -390,7 +394,7 @@ router.get('/workTimes/print/:id', async (req, res) => {
 /**
  * '시간표 생성' 라우팅이 정상 처리 됐을 시 나타나는 화면이며, 다운로드 화면을 보여줍니다.
  */
-router.get('/success', ( _, res) => {
+router.get('/success', profileRequired, ( _, res) => {
   try {
     res.render('profile/success');
   } catch (e) {
@@ -402,7 +406,7 @@ router.get('/success', ( _, res) => {
 /**
  * 다운로드 로직을 처리하는 라우팅입니다. 서버에 저장된 .docx를 사용자가 다운로드 할 수 있습니다.
  */
-router.get('/workTimes/download', (req, res) => {
+router.get('/workTimes/download', profileRequired, (req, res) => {
 
   try {
     
@@ -413,7 +417,7 @@ router.get('/workTimes/download', (req, res) => {
 
       fs.readFile(docxFilePath, (err, data) => {
         if (err) {
-          console.log(err);
+	  winston.error('at /profile/workTimes/download Routing:: ' + err.message);
         } else {
           res.writeHead(200, {"Content-Type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"});
           res.write(data);
@@ -421,7 +425,7 @@ router.get('/workTimes/download', (req, res) => {
         }
       });
   } catch (e) {
-    winston.error('at /profile/workTimes/download Routing:: ' + e.message);
+    	winston.error('at /profile/workTimes/download Routing:: ' + e.message);
   }
   
 });

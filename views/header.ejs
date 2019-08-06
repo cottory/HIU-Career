@@ -11,6 +11,10 @@
         src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
+
+    <!--카카오 로그인 버튼 삽입을 위한 폰트어섬 추가 -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
     <!--bootstrap js 추가 -->
     <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -38,8 +42,7 @@
                             <li class="active"><a href="/profile">PROFILE</a></li> 
                             <li><a href="/accounts/logout" onclick="return confirm('로그아웃 하시겠습니까?')">LOGOUT</a></li>
                         <%} else { %>
-                            <li class="active"><a href="/accounts/join">JOIN</a></li> 
-                            <li><a href="/accounts/login">LOGIN</a></li>  
+                            <li class="active"><a href="/accounts/login">LOGIN</a></li>  
                         <%} %>
                     </ul> 
                 </div> 

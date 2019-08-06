@@ -11,25 +11,37 @@
                         <tr>
                             <th style="width:200px;">학번</th>
                             <td>
-                                <input type="text" class="form-control" value="<%=user.stuID%>" readonly/>
+                                <% if ( typeof(userData) !== 'undefined' && ((userData.stuID === 'admin') || (userData.stuID === 'admin2')) ) {%>
+                                    <input type="text" class="form-control" name="stuID" value="<%=user.stuID%>" required="" readonly/>
+                                <%} else { %> 
+                                    <input type="text" class="form-control" name="stuID" value="<%=user.stuID%>" required=""/>
+                                <%} %>
                             </td>
                         </tr>
                         <tr>
                             <th>이름</th>
                             <td>
-                                <input type="text" class="form-control" name="displayname" value="<%=user.displayname%>" readonly/>
+                                <input type="text" class="form-control" name="displayname" value="<%=user.displayname%>" required=""/>
                             </td>
                         </tr>
                         <tr>
                             <th>패스워드</th>
                             <td>
-                                <input type="password" class="form-control" value="" name="password" required=""/>
+                                <% if ( typeof(userData) !== 'undefined' && ((userData.stuID === 'admin') || (userData.stuID === 'admin2')) ) {%>
+                                    <input type="password" class="form-control" value="" name="password" required=""/>
+                                <%} else { %> 
+                                    <input type="password" class="form-control" value="" name="password" readonly/>
+                                <%} %>
                             </td>
                         </tr>
                         <tr>
                             <th>패스워드 확인</th>
                             <td>
-                                <input type="password" class="form-control" value="" name="password2" required=""/>
+                                <% if ( typeof(userData) !== 'undefined' && ((userData.stuID === 'admin') || (userData.stuID === 'admin2')) ) {%>
+                                    <input type="password" class="form-control" value="" name="password2" required=""/>
+                                <%} else { %> 
+                                    <input type="password" class="form-control" value="" name="password2" readonly/>
+                                <%} %> 
                             </td>
                         </tr>
                         <tr>
@@ -73,26 +85,33 @@
 $('#editForm').submit(function(){
     if(confirm("수정하시겠습니까?")){
 
-        var $passwordInput = $('#editForm input[name=password]');
-        var $passwordInput2 = $('#editForm input[name=password2]');
+        var $userStuID = $('#editForm input[name=stuID]');
 
-        if(!$passwordInput.val()){
-                alert("패스워드를 입력해주세요.");
-                $passwordInput.focus();
-                return false;
-        }
-        if(!$passwordInput2.val()){
-                alert("확인 패스워드를 입력해주세요.");
-                $passwordInput2.focus();
-                return false;
-        }
-        if($passwordInput.val() !== $passwordInput2.val()){
-                alert("패스워드와 확인용패스워드를 똑같이 입력해주세요.");
-                return false;
-        }
+        if ($userStuID.val() === 'admin' || $userStuID.val() === 'admin2') {
 
-        return true;
+            var $passwordInput = $('#editForm input[name=password]');
+            var $passwordInput2 = $('#editForm input[name=password2]');
 
+            if(!$passwordInput.val()){
+                    alert("패스워드를 입력해주세요.");
+                    $passwordInput.focus();
+                    return false;
+            }
+            if(!$passwordInput2.val()){
+                    alert("확인 패스워드를 입력해주세요.");
+                    $passwordInput2.focus();
+                    return false;
+            }
+            if($passwordInput.val() !== $passwordInput2.val()){
+                    alert("패스워드와 확인용패스워드를 똑같이 입력해주세요.");
+                    return false;
+            }
+
+            return true;
+            
+        } else {
+            return true;
+        }
     }else{
         return false;
     }
