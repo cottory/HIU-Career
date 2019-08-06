@@ -63,7 +63,21 @@ async ( req , stuID , password, done) => {
  */
 router.get('/join', csrfProtection, loginRequired, (req, res) => {
     try {
-        res.render('accounts/join', { csrfToken: req.csrfToken()});
+        if  (
+            !req.user.stuID ||
+            !req.user.displayname ||
+            !req.user.major ||
+            !req.user.grade ||
+            !req.user.phone ||
+            !req.user.userType ||
+            !req.user.workType 
+            ) 
+        {
+            res.render('accounts/join', { csrfToken: req.csrfToken()});
+        } else {
+            res.redirect('/');
+        }
+
     } catch (e) {
         winston.error('at /accounts/join Routing::GET ' + e.message);
     }
@@ -100,7 +114,12 @@ router.post('/join', csrfProtection, loginRequired, async(req, res) => {
  */
 router.get('/login', csrfProtection, (req, res) => {
     try {
-        res.render('accounts/login', { flashMessage : req.flash().error, csrfToken: req.csrfToken() });
+        if (!req.isAuthenticated()) {
+            res.render('accounts/login', { flashMessage : req.flash().error, csrfToken: req.csrfToken() });
+        } else {
+            res.redirect('/');
+        }
+        
     } catch (e) {
         winston.error('at /accounts/login Routing:: ' + e.message);
     }
