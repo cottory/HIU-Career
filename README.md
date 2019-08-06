@@ -12,6 +12,7 @@ http://13.209.111.152
 - 웹서버: NGINX  
 - API 서버: Node.js  
 - DB: Mysql
+- LIB: python-docx
 
 주요기능
 ======  
