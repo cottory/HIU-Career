@@ -180,7 +180,7 @@
 
                 //2nd. 종료 시간 - 시작 시간 = 계 계산하기
                 let _startTime, _endTime;
-                
+
                 _startTime = stHour + "" + stMin;
                 _endTime = enHour + "" + enMin;
 
@@ -191,6 +191,10 @@
                 _endTime = Number(_endTime);
 
                 let differ = _endTime - _startTime;
+
+                if (stHour < 12 && 12 < enHour ) {
+                    differ -= 100;
+                }
 
                 if (differ % 100 === 0) {
                     if ((differ / 100) === inputTime) {

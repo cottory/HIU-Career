@@ -9,6 +9,8 @@ const passport = require('passport');
 const fs = require('fs');
 const appRoot = require('app-root-path');
 const winston = require('../winston');
+const sequelize = require("sequelize");
+const Op = sequelize.Op;
 
 
 passport.serializeUser(function(user, done) {
@@ -55,18 +57,23 @@ router.post('/edit', csrfProtection, async(req,res) => {
       if (!req.body.stuID) {
         req.body.stuID = req.user.stuID;
       }
+
       if (!req.body.major) {
         req.body.major = req.user.major;
       }
+
       if (!req.body.grade) {
         req.body.grade = req.user.grade;
       }
+
       if (!req.body.phone) {
         req.body.phone = req.user.phone;
       }
+
       if (!req.body.userType) {
         req.body.userType = req.user.userType;
       }
+      
       if (!req.body.workType) {
         req.body.workType = req.user.workType;
       }
@@ -236,17 +243,23 @@ router.post('/workTimes/edit/:id', csrfProtection , profileRequired, async(req, 
 
       const query = await models.WorkTime.findOne({
         where : {
-          start_time: req.body.start_time,
-          date: req.body.date,
-          user_id: req.user.id
+          [Op.and]: [
+            { start_time: req.body.start_time },
+            { date: req.body.date },
+            { user_id: req.user.id },
+            { id: { [Op.ne]: req.params.id }}
+          ]
         }
       })
 
       const query2 = await models.WorkTime.findOne({
         where : {
-          end_time: req.body.end_time,
-          date: req.body.date,
-          user_id: req.user.id
+          [Op.and]: [
+            { end_time: req.body.end_time },
+            { date: req.body.date },
+            { user_id: req.user.id },
+            { id: { [Op.ne]: req.params.id } }
+          ]
         }
       })
       
